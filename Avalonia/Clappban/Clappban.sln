@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clappban", "Clappban\Clappban.csproj", "{92453496-FC59-4F39-B2E9-07D418AB69B6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Clappban.Tests", "Clappban.Tests\Clappban.Tests.csproj", "{5C12BB1F-D6F9-4369-A716-3C7CF089099F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{92453496-FC59-4F39-B2E9-07D418AB69B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92453496-FC59-4F39-B2E9-07D418AB69B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92453496-FC59-4F39-B2E9-07D418AB69B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C12BB1F-D6F9-4369-A716-3C7CF089099F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C12BB1F-D6F9-4369-A716-3C7CF089099F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C12BB1F-D6F9-4369-A716-3C7CF089099F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C12BB1F-D6F9-4369-A716-3C7CF089099F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
