@@ -3,23 +3,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Clappban.Kbn;
 using Clappban.Kbn.Readers;
 using Clappban.Kbn.Readers.LineReaders;
 using Moq;
 using NUnit.Framework;
-using NUnit.Framework.Legacy;
 
 namespace Clappban.Tests.Models.Kbn;
 
 [TestFixture]
-[TestOf(typeof(KbnReader))]
-public class KbnReaderTest
+[TestOf(typeof(FileReader))]
+public class FileReaderTest
 {
     [Test]
     public void Test_Constructor_WhenStartLineReaderIsNull_ThrowArgumentNullException()
     {
-        Assert.Throws<ArgumentNullException>(() => new KbnReader(null));
+        Assert.Throws<ArgumentNullException>(() => new FileReader(null));
     }
     
     [Test]
@@ -31,9 +29,9 @@ public class KbnReaderTest
         var startLineReader = Mock.Of<ILineReader>();
         Mock.Get(startLineReader).Setup(x => x.IsValid(It.IsAny<string>())).Returns(false);
 
-        KbnReader reader = new KbnReader(startLineReader);
+        FileReader reader = new FileReader(startLineReader);
 
-        Assert.Throws<KbnReader.NotValidException>(() => reader.Read(sr));
+        Assert.Throws<FileReader.NotValidException>(() => reader.Read(sr));
     }
 
     [Test]
@@ -45,7 +43,7 @@ public class KbnReaderTest
         Mock.Get(startLineReader).Setup(x => x.IsValid(It.IsAny<string>())).Returns(true);
         Mock.Get(startLineReader).Setup(x => x.Action(It.IsAny<string>()));
 
-        KbnReader reader = new KbnReader(startLineReader);
+        FileReader reader = new FileReader(startLineReader);
         reader.Read(stream);
         
         Mock.Get(startLineReader).Verify(x => x.Action(It.IsAny<string>()), Times.Once);
@@ -61,7 +59,7 @@ public class KbnReaderTest
         Mock.Get(startLineReader).Setup(x => x.Action(It.IsAny<string>()));
         Mock.Get(startLineReader).Setup(x => x.NextPossibleReaders);
         
-        KbnReader reader = new KbnReader(startLineReader);
+        FileReader reader = new FileReader(startLineReader);
         reader.Read(stream);
         
         Mock.Get(startLineReader).Verify(x => x.NextPossibleReaders, Times.Once);
@@ -77,7 +75,7 @@ public class KbnReaderTest
         Mock.Get(startLineReader).Setup(x => x.Action(It.IsAny<string>()));
         Mock.Get(startLineReader).Setup(x => x.NextPossibleReaders).Returns(Enumerable.Empty<ILineReader>());
 
-        var reader = new KbnReader(startLineReader);
+        var reader = new FileReader(startLineReader);
         var kbn = reader.Read(stream);
 
         Assert.That(kbn, Is.Not.Null);
@@ -101,9 +99,9 @@ public class KbnReaderTest
         Mock.Get(startLineReader).Setup(x => x.Action(It.IsAny<string>()));
         Mock.Get(startLineReader).Setup(x => x.NextPossibleReaders).Returns(nextReaders);
         
-        var reader = new KbnReader(startLineReader);
+        var reader = new FileReader(startLineReader);
 
-        Assert.Throws<KbnReader.NotValidException>(() => reader.Read(stream));
+        Assert.Throws<FileReader.NotValidException>(() => reader.Read(stream));
     }
 
     [Test]
@@ -132,7 +130,7 @@ public class KbnReaderTest
         Mock.Get(startLineReader).Setup(x => x.Action(It.IsAny<string>()));
         Mock.Get(startLineReader).Setup(x => x.NextPossibleReaders).Returns(nextReaders);
 
-        var reader = new KbnReader(startLineReader);
+        var reader = new FileReader(startLineReader);
         var kbn = reader.Read(stream);
 
         Mock.Get(reader1).Verify(x => x.Action(It.IsAny<string>()), Times.Never());

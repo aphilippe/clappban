@@ -8,11 +8,11 @@ using Clappban.Kbn.Readers.LineReaders;
 
 namespace Clappban.Kbn.Readers;
 
-public class KbnReader
+public class FileReader
 {
     private ILineReader _startLineReader;
 
-    public KbnReader(ILineReader startLineReader)
+    public FileReader(ILineReader startLineReader)
     {
         _startLineReader = startLineReader ?? throw new ArgumentNullException(nameof(startLineReader));
     }
@@ -20,15 +20,6 @@ public class KbnReader
 
     public Kbn Read(StreamReader stream)
     {
-        // Test possible line reader
-        // get line
-        // First returning true -> action
-        // get next possible line readers
-        // loop
-        
-        // get to the end of file or error
-        // error when no line reader is valid
-
         var lineReaders = new List<ILineReader> {_startLineReader};
 
         while (lineReaders.Any())
@@ -47,7 +38,7 @@ public class KbnReader
             }
             
             chosenLineReader.Action(line);
-            lineReaders = chosenLineReader.NextPossibleReaders.ToList();
+            lineReaders = chosenLineReader.NextPossibleReaders?.ToList() ?? Enumerable.Empty<ILineReader>().ToList();
         }
 
         return new Kbn("", new Section[]{});

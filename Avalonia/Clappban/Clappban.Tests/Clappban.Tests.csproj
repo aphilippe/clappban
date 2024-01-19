@@ -16,9 +16,5 @@
   <ItemGroup>
     <ProjectReference Include="..\Clappban\Clappban.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\Kbn\Readers\LineReaders\" />
-  </ItemGroup>
   
 </Project>

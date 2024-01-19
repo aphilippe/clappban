@@ -9,8 +9,12 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
 using Clappban.Kbn;
 using Clappban.Kbn.Readers;
+using Clappban.Kbn.Readers.LineReaders;
+using Clappban.Kbn.Readers.LineReaders.Actions;
+using Clappban.Kbn.Readers.LineReaders.Conditions;
 using Clappban.Models.Boards;
 using ReactiveUI;
+using Task = System.Threading.Tasks.Task;
 
 namespace Clappban.ViewModels;
 
@@ -24,14 +28,13 @@ public class MainWindowViewModel : ViewModelBase
     private async Task OpenFileAsync(IStorageFile file)
     {
         await using var stream = await file.OpenReadAsync();
-        var boardReader = new KbnReader(null);
-        boardReader.Read(new StreamReader(stream));
-        
-        
         using var streamReader = new StreamReader(stream);
-        var fileContent = await streamReader.ReadToEndAsync();
+
+        var boardBuilder = new BoardKbnBuilder();
         
-        Console.Write(fileContent);
+        KbnFileReader.Read(streamReader, boardBuilder);
+
+        var board = boardBuilder.Build();
     }
 
     public ICommand ReadFileCommand { get; }
