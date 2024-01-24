@@ -1,41 +1,37 @@
-﻿using System;
-using System.IO;
-using System.Net.Mail;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Windows.Input;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
-using Clappban.Kbn;
+using Clappban.InjectionDependency;
 using Clappban.Kbn.Readers;
-using Clappban.Kbn.Readers.LineReaders;
-using Clappban.Kbn.Readers.LineReaders.Actions;
-using Clappban.Kbn.Readers.LineReaders.Conditions;
 using Clappban.Models.Boards;
 using ReactiveUI;
+using Splat;
 using Task = System.Threading.Tasks.Task;
 
 namespace Clappban.ViewModels;
 
 public class MainWindowViewModel : ViewModelBase
 {
-    public MainWindowViewModel()
+    private readonly IBoardRepository _boardRepository;
+    private ViewModelBase? _contentViewModel;
+
+    public ViewModelBase? ContentViewModel
     {
-        ReadFileCommand = ReactiveCommand.CreateFromTask<IStorageFile>(OpenFileAsync);
+        get => _contentViewModel;
+        private set => this.RaiseAndSetIfChanged(ref _contentViewModel, value);
     }
-
-    private async Task OpenFileAsync(IStorageFile file)
+    
+    public MainWindowViewModel(IBoardRepository boardRepository)
     {
-        await using var stream = await file.OpenReadAsync();
-        using var streamReader = new StreamReader(stream);
-
-        var boardBuilder = new BoardKbnBuilder();
+        _boardRepository = boardRepository;
+        _boardRepository.CurrentBoardChanged += (sender, args) =>
+        {
+            if (_boardRepository.CurrentBoard == null) return;
+            ContentViewModel = Locator.Current.GetRequiredService<BoardViewModel>();
+        };
         
-        KbnFileReader.Read(streamReader, boardBuilder);
-
-        var board = boardBuilder.Build();
+        ContentViewModel = Locator.Current.GetRequiredService<OpenFileViewModel>();
     }
 
-    public ICommand ReadFileCommand { get; }
+    
 }

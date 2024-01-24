@@ -1,8 +1,10 @@
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Clappban.InjectionDependency;
 using Clappban.ViewModels;
 using Clappban.Views;
+using Splat;
 
 namespace Clappban;
 
@@ -19,7 +21,7 @@ public partial class App : Application
         {
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainWindowViewModel(),
+                DataContext = Locator.Current.GetRequiredService<MainWindowViewModel>()
             };
         }
 
