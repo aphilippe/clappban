@@ -5,6 +5,8 @@
              xmlns:vm="using:Clappban.ViewModels"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Clappban.Views.TaskView"
-             x:DataType="vm:TaskViewModel">
-    <Label Content="{Binding Title}" Background="RosyBrown"/>
+             x:DataType="vm:TaskViewModel"
+             Background="#22272b"
+             CornerRadius="10">
+    <TextBlock Text="{Binding Title}" TextWrapping="Wrap" Margin="10" Foreground="#b6c2cf"/>
 </UserControl>

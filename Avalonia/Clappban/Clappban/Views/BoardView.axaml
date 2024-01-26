@@ -6,9 +6,12 @@
              xmlns:view="clr-namespace:Clappban.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Clappban.Views.BoardView"
-             x:DataType="vm:BoardViewModel">
-    <StackPanel>
-        <Label Content="{Binding Board.Name}"/>
+             x:DataType="vm:BoardViewModel"
+             Background="#005485">
+    <StackPanel Margin="10 0">
+        <Label Content="{Binding Board.Name}" 
+               Margin="0 20" 
+               FontSize="35" FontWeight="Bold" />
         <ItemsControl ItemsSource="{Binding Columns}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -17,7 +20,7 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <view:ColumnView DataContext="{Binding .}"/>
+                    <view:ColumnView DataContext="{Binding .}" VerticalAlignment="Top"/>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

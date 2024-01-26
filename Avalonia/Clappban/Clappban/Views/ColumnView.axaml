@@ -6,9 +6,13 @@
              xmlns:views="clr-namespace:Clappban.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Clappban.Views.ColumnView"
-             x:DataType="vm:ColumnViewModel">
-    <StackPanel Background="SaddleBrown" Spacing="10">
-        <Label Content="{Binding Title}" />
+             x:DataType="vm:ColumnViewModel"
+             Width="272"
+             Background="#101204"
+             CornerRadius="10">
+    <StackPanel Spacing="10" Margin="10">
+        <Label Content="{Binding Title}"
+               Foreground="#b6c2cf" FontWeight="Bold" />
         <ItemsControl ItemsSource="{Binding Tasks}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
