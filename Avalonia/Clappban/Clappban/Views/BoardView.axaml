@@ -9,9 +9,12 @@
              x:DataType="vm:BoardViewModel"
              Background="#005485">
     <StackPanel Margin="10 0">
-        <Label Content="{Binding Board.Name}" 
-               Margin="0 20" 
-               FontSize="35" FontWeight="Bold" />
+        <StackPanel Orientation="Horizontal">
+            <Label Content="{Binding Board.Name}" 
+                   Margin="0 20" 
+                   FontSize="35" FontWeight="Bold" />
+            <Button Content="Reload" Command="{Binding ReloadCommand}"/>
+        </StackPanel>
         <ItemsControl ItemsSource="{Binding Columns}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>

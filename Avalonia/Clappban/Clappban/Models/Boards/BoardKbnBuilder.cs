@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Avalonia.Platform.Storage;
 using Clappban.Kbn.Builders;
 
 namespace Clappban.Models.Boards;
@@ -10,6 +11,12 @@ public class BoardKbnBuilder : IKbnBuilder
 {
     private string _title = "";
     private readonly List<ColumnBuilder> _columnBuilders = new();
+    private readonly IStorageFile _file;
+
+    public BoardKbnBuilder(IStorageFile file)
+    {
+        _file = file;
+    }
 
     public void SetTitle(string title)
     {
@@ -30,7 +37,7 @@ public class BoardKbnBuilder : IKbnBuilder
     public Board Build()
     {
         var columns = _columnBuilders.Select(x => x.Build());
-        return new Board(_title, columns);
+        return new Board(_title, columns, _file);
     }
 }
 
