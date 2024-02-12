@@ -2,6 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:i="https://github.com/projektanker/icons.avalonia"
              xmlns:vm="using:Clappban.ViewModels"
              xmlns:view="clr-namespace:Clappban.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -9,11 +10,13 @@
              x:DataType="vm:BoardViewModel"
              Background="#005485">
     <StackPanel Margin="10 0">
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal" Background="Transparent">
             <Label Content="{Binding Board.Name}" 
                    Margin="0 20" 
                    FontSize="35" FontWeight="Bold" />
-            <Button Content="Reload" Command="{Binding ReloadCommand}"/>
+            <Button Command="{Binding ReloadCommand}"
+                    i:Attached.Icon="fa-solid fa-rotate" FontSize="24"
+                    IsVisible="{Binding $parent.IsPointerOver}" />
         </StackPanel>
         <ItemsControl ItemsSource="{Binding Columns}">
             <ItemsControl.ItemsPanel>
