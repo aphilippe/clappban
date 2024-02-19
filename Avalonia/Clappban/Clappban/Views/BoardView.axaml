@@ -9,26 +9,33 @@
              x:Class="Clappban.Views.BoardView"
              x:DataType="vm:BoardViewModel"
              Background="#005485">
-    <StackPanel Margin="10 0">
-        <StackPanel Orientation="Horizontal" Background="Transparent">
-            <Label Content="{Binding Board.Name}" 
-                   Margin="0 20" 
-                   FontSize="35" FontWeight="Bold" />
-            <Button Command="{Binding ReloadCommand}"
-                    i:Attached.Icon="fa-solid fa-rotate" FontSize="24"
-                    IsVisible="{Binding $parent.IsPointerOver}" />
+    <Grid>
+        <StackPanel Margin="10 0">
+            <StackPanel Orientation="Horizontal" Background="Transparent">
+                <Label Content="{Binding Board.Name}" 
+                       Margin="0 20" 
+                       FontSize="35" FontWeight="Bold" />
+                <StackPanel Orientation="Horizontal" IsVisible="{Binding $parent.IsPointerOver}">
+                    <Button Command="{Binding ReloadCommand}"
+                            i:Attached.Icon="fa-solid fa-rotate" FontSize="24" />
+                    <Button i:Attached.Icon="fa-solid fa-pen" FontSize="24" />
+                </StackPanel>
+            </StackPanel>
+            <ItemsControl ItemsSource="{Binding Columns}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Spacing="10" Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <view:ColumnView DataContext="{Binding .}" VerticalAlignment="Top"/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </StackPanel>
-        <ItemsControl ItemsSource="{Binding Columns}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Spacing="10" Orientation="Horizontal" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <view:ColumnView DataContext="{Binding .}" VerticalAlignment="Top"/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </StackPanel>
+        <ContentControl Content="{Binding EditFileViewModel}"
+                        VerticalAlignment="Center" HorizontalAlignment="Right"/>
+        <!-- <view:EditFileView VerticalAlignment="Center" HorizontalAlignment="Center" /> -->
+    </Grid>
 </UserControl>

@@ -13,6 +13,7 @@ public class BoardViewModel : ViewModelBase
     public Board Board => _boardRepository.CurrentBoard!;
     public IEnumerable<ColumnViewModel>? Columns { get; }
     public ICommand ReloadCommand { get; }
+    public EditFileViewModel EditFileViewModel { get; }
     
     public BoardViewModel(IBoardRepository boardRepository)
     {
@@ -22,5 +23,7 @@ public class BoardViewModel : ViewModelBase
 
         ReloadCommand =
             ReactiveCommand.CreateFromTask(() => _boardRepository.OpenAsync(Board.File));
+
+        EditFileViewModel = new EditFileViewModel(_boardRepository.CurrentBoard.File, _boardRepository);
     }
 }
