@@ -18,7 +18,8 @@
                 <StackPanel Orientation="Horizontal" IsVisible="{Binding $parent.IsPointerOver}">
                     <Button Command="{Binding ReloadCommand}"
                             i:Attached.Icon="fa-solid fa-rotate" FontSize="24" />
-                    <Button i:Attached.Icon="fa-solid fa-pen" FontSize="24" />
+                    <Button Command="{Binding EditCommand}" 
+                        i:Attached.Icon="fa-solid fa-pen" FontSize="24" />
                 </StackPanel>
             </StackPanel>
             <ItemsControl ItemsSource="{Binding Columns}">
@@ -34,8 +35,5 @@
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </StackPanel>
-        <ContentControl Content="{Binding EditFileViewModel}"
-                        VerticalAlignment="Center" HorizontalAlignment="Right"/>
-        <!-- <view:EditFileView VerticalAlignment="Center" HorizontalAlignment="Center" /> -->
     </Grid>
 </UserControl>

@@ -1,22 +1,31 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:Clappban.ViewModels"
+        xmlns:modal="using:Clappban.Modal"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Clappban.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="Clappban"
-        Content="{Binding ContentViewModel}">
+        Title="Clappban">
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <vm:MainWindowViewModel/>
     </Design.DataContext>
-
-    
-    <!-- <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/> -->
+    <Grid>
+        <ContentControl Content="{Binding ContentViewModel}"
+                        Classes.ModalOpen="{Binding #Modal.IsVisible}"
+                        VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <ContentControl.Styles>
+                <Style Selector="ContentControl.ModalOpen">
+                   <Setter Property="Effect" Value="blur(30)"/>
+                </Style>
+            </ContentControl.Styles>
+        </ContentControl>
+        <modal:ModalView Name="Modal" DataContext="{Binding ModalViewModel}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+    </Grid>
 
 </Window>
