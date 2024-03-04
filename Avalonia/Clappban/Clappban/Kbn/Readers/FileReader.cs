@@ -17,7 +17,6 @@ public class FileReader
         _startLineReader = startLineReader ?? throw new ArgumentNullException(nameof(startLineReader));
     }
 
-
     public Kbn Read(StreamReader stream)
     {
         var lineReaders = new List<ILineReader> {_startLineReader};

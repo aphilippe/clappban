@@ -8,5 +8,7 @@
              x:DataType="vm:TaskViewModel"
              Background="#22272b"
              CornerRadius="10">
-    <TextBlock Text="{Binding Title}" TextWrapping="Wrap" Margin="10" Foreground="#b6c2cf"/>
+    <Button HorizontalAlignment="Stretch" VerticalAlignment="Stretch" CornerRadius="10" Command="{Binding OpenTaskCommand}">
+        <TextBlock Text="{Binding Title}" TextWrapping="Wrap" Margin="10" Foreground="#b6c2cf"/>
+    </Button>
 </UserControl>

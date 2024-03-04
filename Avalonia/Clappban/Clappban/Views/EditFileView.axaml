@@ -17,8 +17,8 @@
                    IsVisible="{Binding ErrorDetected}"/>
             <StackPanel HorizontalAlignment="Right"
                         Orientation="Horizontal" Spacing="10">
-                <Button Content="Cancel" Command="{Binding  CancelCommand}"/>
                 <Button Content="Save" Command="{Binding SaveCommand}"/>
+                <Button Content="Cancel" Command="{Binding  CancelCommand}"/>
             </StackPanel>
         </StackPanel>
         <TextBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch"

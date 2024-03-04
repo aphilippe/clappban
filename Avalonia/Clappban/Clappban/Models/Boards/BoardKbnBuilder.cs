@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Avalonia.Controls.Platform;
 using Avalonia.Platform.Storage;
 using Clappban.Kbn.Builders;
 
@@ -11,11 +13,11 @@ public class BoardKbnBuilder : IKbnBuilder
 {
     private string _title = "";
     private readonly List<ColumnBuilder> _columnBuilders = new();
-    private readonly IStorageFile _file;
+    private readonly string _filePath;
 
-    public BoardKbnBuilder(IStorageFile file)
+    public BoardKbnBuilder(string filePath)
     {
-        _file = file;
+        _filePath = filePath;
     }
 
     public void SetTitle(string title)
@@ -25,7 +27,7 @@ public class BoardKbnBuilder : IKbnBuilder
 
     public void AddSection(string title)
     {
-        var columnBuilder = new ColumnBuilder(title);
+        var columnBuilder = new ColumnBuilder(title, _filePath);
         _columnBuilders.Add(columnBuilder);
     }
 
@@ -37,7 +39,7 @@ public class BoardKbnBuilder : IKbnBuilder
     public Board Build()
     {
         var columns = _columnBuilders.Select(x => x.Build());
-        return new Board(_title, columns, _file);
+        return new Board(_title, columns, _filePath);
     }
 }
 
@@ -45,10 +47,12 @@ public class ColumnBuilder : IKbnSectionBuilder
 {
     private readonly string _title;
     private readonly List<TaskBuilder> _tasks = new();
+    private readonly string _boardFilePath;
 
-    public ColumnBuilder(string title)
+    public ColumnBuilder(string title, string boardFilePath)
     {
         _title = title;
+        _boardFilePath = boardFilePath;
     }
 
     public void AppendToContent(string text)
@@ -58,8 +62,10 @@ public class ColumnBuilder : IKbnSectionBuilder
         var match = Regex.Match(text, pattern);
 
         if (!match.Success) throw new InvalidBoardFileException();
+
+        string taskFilePath = Path.Combine(Path.GetDirectoryName(_boardFilePath), match.Groups["file"].Value);
         
-        _tasks.Add(new TaskBuilder(match.Groups["title"].Value, match.Groups["file"].Value));
+        _tasks.Add(new TaskBuilder(match.Groups["title"].Value, taskFilePath));
     }
 
     public Column Build()
@@ -83,7 +89,7 @@ public class TaskBuilder
     public Task Build()
     {
         // we do not use file for now
-        return new Task(_title);
+        return new Task(_title, _filePath);
     }
 }
 

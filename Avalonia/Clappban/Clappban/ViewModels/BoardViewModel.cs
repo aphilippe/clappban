@@ -26,12 +26,12 @@ public class BoardViewModel : ViewModelBase
         Columns = _boardRepository.CurrentBoard?.Columns.Select(x => new ColumnViewModel(x)).ToList();
 
         ReloadCommand =
-            ReactiveCommand.CreateFromTask(() => _boardRepository.OpenAsync(Board.File));
+            ReactiveCommand.CreateFromTask(() => _boardRepository.OpenAsync(Board.FilePath));
         
         EditCommand = ReactiveCommand.Create(() =>
         {
             _modalViewModel.DisplayModal(
-                new EditFileViewModel(_boardRepository.CurrentBoard.File, _boardRepository));
+                new EditFileViewModel(_boardRepository.CurrentBoard.FilePath, _boardRepository));
         });
     }
 }

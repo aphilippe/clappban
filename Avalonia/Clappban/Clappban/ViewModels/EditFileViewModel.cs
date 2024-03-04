@@ -4,6 +4,7 @@ using System.Text;
 using System.Windows.Input;
 using Avalonia.Platform.Storage;
 using Clappban.InjectionDependency;
+using Clappban.Kbn.Builders;
 using Clappban.Kbn.Readers;
 using Clappban.Modal;
 using Clappban.Models.Boards;
@@ -16,12 +17,9 @@ namespace Clappban.ViewModels;
 
 public class EditFileViewModel : ViewModelBase
 {
-    private readonly IBoardRepository _boardRepository;
-
-    public EditFileViewModel(IStorageFile file, IBoardRepository boardRepository)
+    public EditFileViewModel(string filePath, IBoardRepository boardRepository)
     {
-        _boardRepository = boardRepository;
-        using (var sr = new StreamReader(file.OpenReadAsync().GetAwaiter().GetResult()))
+        using (var sr = new StreamReader(filePath))
         {
             Text = sr.ReadToEnd();
         }
@@ -29,15 +27,18 @@ public class EditFileViewModel : ViewModelBase
         var saveCommand = ReactiveCommand.CreateFromTask(async () =>
         {
             ErrorDetected = false;
-            if (IsTextValid(file, out var boardBuilder))
+            if (IsTextValid(filePath, out var boardBuilder))
             {
                 ErrorDetected = true;
                 return;
             }
 
-            _boardRepository.CurrentBoard = boardBuilder.Build();
-            
-            await SaveFile(file);
+            // if (boardRepository != null)
+            // {
+            //     boardRepository.CurrentBoard = boardBuilder.Build();
+            // }
+
+            await SaveFile(filePath);
 
             Locator.Current.GetRequiredService<ModalManager>().CloseModal();
         });
@@ -47,13 +48,14 @@ public class EditFileViewModel : ViewModelBase
         CancelCommand = ReactiveCommand.Create(() => Locator.Current.GetRequiredService<ModalManager>().CloseModal());
     }
 
-    private bool IsTextValid(IStorageFile file, out BoardKbnBuilder boardBuilder)
+    private bool IsTextValid(string filePath, out IKbnBuilder kbnBuilder)
     {
-        boardBuilder = new BoardKbnBuilder(file);
+        // boardBuilder = new BoardKbnBuilder(filePath);
+        kbnBuilder = new DummyKbnBuilder();
         using var streamReader = new StreamReader(new MemoryStream(Encoding.UTF8.GetBytes(Text)));
         try
         {
-            KbnFileReader.Read(streamReader, boardBuilder);
+            KbnFileReader.Read(streamReader, kbnBuilder);
         }
         catch (Exception)
         {
@@ -63,10 +65,9 @@ public class EditFileViewModel : ViewModelBase
         return false;
     }
 
-    private async Task SaveFile(IStorageFile file)
+    private async Task SaveFile(string filePath)
     {
-        var stream = await file.OpenWriteAsync();
-        var streamWriter = new StreamWriter(stream);
+        var streamWriter = new StreamWriter(filePath);
         await streamWriter.WriteAsync(Text);
         streamWriter.Close();
     }

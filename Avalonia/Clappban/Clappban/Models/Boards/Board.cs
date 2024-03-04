@@ -5,16 +5,16 @@ namespace Clappban.Models.Boards;
 
 public class Board
 {
-    public Board(string name, IEnumerable<Column> columns, IStorageFile file)
+    public Board(string name, IEnumerable<Column> columns, string filePath)
     {
         Name = name;
         Columns = columns;
-        File = file;
+        FilePath = filePath;
     }
 
     public string Name { get; }
     public IEnumerable<Column> Columns { get; }
-    public IStorageFile File { get; }
+    public string FilePath { get; }
 }
 
 public class Column
@@ -32,9 +32,11 @@ public class Column
 public class Task
 {
     public string Title { get; }
+    public string FilePath { get; }
 
-    public Task(string title)
+    public Task(string title, string filePath)
     {
         Title = title;
+        FilePath = filePath;
     }
 }

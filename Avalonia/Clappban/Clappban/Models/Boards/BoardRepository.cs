@@ -12,7 +12,7 @@ public interface IBoardRepository
 
     event EventHandler CurrentBoardChanged;
 
-    System.Threading.Tasks.Task OpenAsync(IStorageFile file);
+    System.Threading.Tasks.Task OpenAsync(string filePath);
 }
 
 public class BoardRepository : IBoardRepository
@@ -31,12 +31,11 @@ public class BoardRepository : IBoardRepository
 
     public event EventHandler? CurrentBoardChanged;
 
-    public async System.Threading.Tasks.Task OpenAsync(IStorageFile file)
+    public async System.Threading.Tasks.Task OpenAsync(string filePath)
     {
-        await using var stream = await file.OpenReadAsync();
-        using var streamReader = new StreamReader(stream);
-
-        var boardBuilder = new BoardKbnBuilder(file);
+        using var streamReader = new StreamReader(filePath);
+        
+        var boardBuilder = new BoardKbnBuilder(filePath);
         
         KbnFileReader.Read(streamReader, boardBuilder);
 

@@ -19,7 +19,7 @@ public class OpenFileViewModel : ViewModelBase
 
     private async Task OpenFileAsync(IStorageFile file)
     {
-        await _boardRepository.OpenAsync(file);
+        await _boardRepository.OpenAsync(file.Path.LocalPath);
     }
 
     public ICommand ReadFileCommand { get; }
