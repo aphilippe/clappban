@@ -12,10 +12,8 @@ public class ParameterizedLineReader : ILineReader
 
     public ParameterizedLineReader(ILineReaderCondition condition, ILineReaderAction action)
     {
-        if (condition == null) throw new ArgumentNullException(nameof(condition));
-        if (action == null) throw new ArgumentNullException(nameof(action));
-        _condition = condition;
-        _action = action;
+        _condition = condition ?? throw new ArgumentNullException(nameof(condition));
+        _action = action ?? throw new ArgumentNullException(nameof(action));
     }
 
     public bool IsValid(string line)

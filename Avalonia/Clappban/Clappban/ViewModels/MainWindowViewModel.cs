@@ -5,6 +5,7 @@ using Clappban.InjectionDependency;
 using Clappban.Kbn.Readers;
 using Clappban.Modal;
 using Clappban.Models.Boards;
+using Clappban.Navigation;
 using ReactiveUI;
 using Splat;
 using Task = System.Threading.Tasks.Task;
@@ -14,15 +15,11 @@ namespace Clappban.ViewModels;
 public class MainWindowViewModel : ViewModelBase
 {
     private readonly IBoardRepository _boardRepository;
-    private ViewModelBase? _contentViewModel;
 
-    public ViewModelBase? ContentViewModel
-    {
-        get => _contentViewModel;
-        private set => this.RaiseAndSetIfChanged(ref _contentViewModel, value);
-    }
+    public ViewModelBase? ContentViewModel => _mainViewModelPresenter.CurrentViewModel;
 
     private ModalViewModel? _modalViewModel;
+    private readonly IViewModelPresenter _mainViewModelPresenter;
 
     public ModalViewModel? ModalViewModel
     {
@@ -30,17 +27,18 @@ public class MainWindowViewModel : ViewModelBase
         private set => this.RaiseAndSetIfChanged(ref _modalViewModel, value);
     }
     
-    public MainWindowViewModel(IBoardRepository boardRepository, ModalViewModel modalViewModel)
+    public MainWindowViewModel(IBoardRepository boardRepository, ModalViewModel modalViewModel,
+        IViewModelPresenter mainViewModelPresenter)
     {
         _boardRepository = boardRepository;
         _modalViewModel = modalViewModel;
-        _boardRepository.CurrentBoardChanged += (sender, args) =>
-        {
-            if (_boardRepository.CurrentBoard == null) return;
-            ContentViewModel = Locator.Current.GetRequiredService<BoardViewModel>();
-        };
+        _mainViewModelPresenter = mainViewModelPresenter;
         
-        ContentViewModel = Locator.Current.GetRequiredService<OpenFileViewModel>();
+        mainViewModelPresenter.Display(Locator.Current.GetRequiredService<OpenFileViewModel>());
+        mainViewModelPresenter.CurrentViewModelChanged += (_, _) =>
+        {
+            this.RaisePropertyChanged(nameof(ContentViewModel));
+        };
     }
 
     
