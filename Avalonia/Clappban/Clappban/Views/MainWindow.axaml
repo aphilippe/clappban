@@ -1,7 +1,6 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:Clappban.ViewModels"
-        xmlns:modal="using:Clappban.Modal"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
@@ -25,7 +24,9 @@
                 </Style>
             </ContentControl.Styles>
         </ContentControl>
-        <modal:ModalView Name="Modal" DataContext="{Binding ModalViewModel}" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"/>
+        <ContentControl Name="Modal" Content="{Binding ModalViewModel}" 
+                        VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                        IsVisible="{Binding ModalViewModel, Converter={x:Static ObjectConverters.IsNotNull}}"/>
     </Grid>
 
 </Window>

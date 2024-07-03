@@ -1,18 +1,13 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
-using Avalonia.Platform.Storage;
 using Clappban.Kbn.Readers;
 
 namespace Clappban.Models.Boards;
 
 public interface IBoardRepository
 {
-    Board? CurrentBoard { get; set; }
-
-    event EventHandler CurrentBoardChanged;
-
-    System.Threading.Tasks.Task OpenAsync(string filePath);
+    Task<Board?> OpenAsync(string filePath);
 }
 
 public class BoardRepository : IBoardRepository
@@ -31,7 +26,7 @@ public class BoardRepository : IBoardRepository
 
     public event EventHandler? CurrentBoardChanged;
 
-    public async System.Threading.Tasks.Task OpenAsync(string filePath)
+    public async Task<Board?> OpenAsync(string filePath)
     {
         using var streamReader = new StreamReader(filePath);
         
@@ -40,6 +35,6 @@ public class BoardRepository : IBoardRepository
         KbnFileReader.Read(streamReader, boardBuilder);
 
         var board = boardBuilder.Build();
-        CurrentBoard = board;
+        return board;
     }
 }

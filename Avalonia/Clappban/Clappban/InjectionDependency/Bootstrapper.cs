@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Clappban.Modal;
+﻿using Avalonia.Controls.Shapes;
 using Clappban.Models.Boards;
 using Clappban.Navigation;
+using Clappban.Navigation.Navigators;
 using Clappban.ViewModels;
+using Clappban.ViewModels.Factories;
 using Splat;
 
 namespace Clappban.InjectionDependency;
@@ -12,21 +12,34 @@ public static class Bootstrapper
 {
     public static void Register(IMutableDependencyResolver services, IReadonlyDependencyResolver resolver)
     {
-        services.RegisterLazySingleton<IBoardRepository>(() => new BoardRepository());
-
-        var modalViewModel = new ModalViewModel();
-        services.RegisterLazySingleton(() => new ModalManager(modalViewModel));
-        
         var mainViewPresenter = new MainViewModelPresenter();
-        services.Register<INavigationServicePresenterRepository>(() => new DefaultNavigationServicePresenterRepository(new Dictionary<Type, IViewModelPresenter>
-        {
-            {typeof(BoardViewModel), mainViewPresenter},
-            {typeof(OpenFileViewModel), mainViewPresenter}
-        }));
-        services.RegisterLazySingleton(() => new NavigationService(resolver.GetRequiredService<INavigationServicePresenterRepository>(), resolver));
+        var modalViewPresenter = new ModalViewPresenter();
         
-        services.Register(() => new BoardViewModel(resolver.GetRequiredService<IBoardRepository>(), resolver.GetRequiredService<ModalManager>()));
-        services.Register(() => new OpenFileViewModel(resolver.GetRequiredService<IBoardRepository>(), resolver.GetRequiredService<NavigationService>()));
-        services.Register(() => new MainWindowViewModel(resolver.GetRequiredService<IBoardRepository>(), modalViewModel, mainViewPresenter));
+        services.RegisterLazySingleton<IBoardRepository>(() => new BoardRepository());
+        
+        services.Register<ITaskViewModelFactory>(() => new TaskViewModelFactory(
+            new ParameterNavigator<string,EditFileViewModel>(modalViewPresenter, path => GenerateEditFileViewModel(path, modalViewPresenter))));
+        services.Register<IColumnViewModelFactory>(() => new ColumnViewModelFactory(resolver.GetRequiredService<ITaskViewModelFactory>()));
+        
+        services.Register(() => new BoardViewModelFactory(
+            resolver.GetRequiredService<IColumnViewModelFactory>(),
+            new ParameterNavigator<string,EditFileViewModel>(modalViewPresenter, path => GenerateEditFileViewModel(path, modalViewPresenter)),
+            resolver.GetRequiredService<IBoardRepository>())
+        );
+        
+        services.Register(
+            () => new OpenFileViewModel(
+                resolver.GetRequiredService<IBoardRepository>(), 
+            new ParameterNavigator<Board, BoardViewModel>(mainViewPresenter, 
+                board => resolver.GetRequiredService<BoardViewModelFactory>().Create(board)
+                )));
+        
+        services.Register(() => new MainWindowViewModel(modalViewPresenter, mainViewPresenter));
+    }
+
+    private static EditFileViewModel GenerateEditFileViewModel(string path, ModalViewPresenter modalViewPresenter)
+    {
+        var finishEditingNavigator = new CloseModalNavigator(modalViewPresenter);
+        return new EditFileViewModel(path, finishEditingNavigator);
     }
 }

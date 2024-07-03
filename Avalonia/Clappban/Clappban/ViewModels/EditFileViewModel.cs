@@ -2,14 +2,10 @@
 using System.IO;
 using System.Text;
 using System.Windows.Input;
-using Avalonia.Platform.Storage;
-using Clappban.InjectionDependency;
 using Clappban.Kbn.Builders;
 using Clappban.Kbn.Readers;
-using Clappban.Modal;
-using Clappban.Models.Boards;
+using Clappban.Navigation.Navigators;
 using ReactiveUI;
-using Splat;
 using Console = System.Console;
 using Task = System.Threading.Tasks.Task;
 
@@ -17,7 +13,7 @@ namespace Clappban.ViewModels;
 
 public class EditFileViewModel : ViewModelBase
 {
-    public EditFileViewModel(string filePath, IBoardRepository boardRepository)
+    public EditFileViewModel(string filePath, INavigator finishEditingNavigator)
     {
         using (var sr = new StreamReader(filePath))
         {
@@ -27,31 +23,25 @@ public class EditFileViewModel : ViewModelBase
         var saveCommand = ReactiveCommand.CreateFromTask(async () =>
         {
             ErrorDetected = false;
-            if (IsTextValid(filePath, out var boardBuilder))
+            if (!IsTextValid())
             {
                 ErrorDetected = true;
                 return;
             }
 
-            // if (boardRepository != null)
-            // {
-            //     boardRepository.CurrentBoard = boardBuilder.Build();
-            // }
-
             await SaveFile(filePath);
 
-            Locator.Current.GetRequiredService<ModalManager>().CloseModal();
+            finishEditingNavigator.Navigate();
         });
         saveCommand.ThrownExceptions.Subscribe(ex => Console.Write(ex.Message));
         SaveCommand = saveCommand;
 
-        CancelCommand = ReactiveCommand.Create(() => Locator.Current.GetRequiredService<ModalManager>().CloseModal());
+        CancelCommand = ReactiveCommand.Create(finishEditingNavigator.Navigate);
     }
 
-    private bool IsTextValid(string filePath, out IKbnBuilder kbnBuilder)
+    private bool IsTextValid()
     {
-        // boardBuilder = new BoardKbnBuilder(filePath);
-        kbnBuilder = new DummyKbnBuilder();
+        var kbnBuilder = new DummyKbnBuilder();
         using var streamReader = new StreamReader(new MemoryStream(Encoding.UTF8.GetBytes(Text)));
         try
         {
@@ -59,10 +49,10 @@ public class EditFileViewModel : ViewModelBase
         }
         catch (Exception)
         {
-            return true;
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     private async Task SaveFile(string filePath)
@@ -79,6 +69,6 @@ public class EditFileViewModel : ViewModelBase
         get => _errorDetected;
         private set => this.RaiseAndSetIfChanged(ref _errorDetected, value);
     }
-    public ICommand SaveCommand { get; }
-    public ICommand CancelCommand { get; }
+    public ICommand SaveCommand { get; private set; }
+    public ICommand CancelCommand { get; private set; }
 }

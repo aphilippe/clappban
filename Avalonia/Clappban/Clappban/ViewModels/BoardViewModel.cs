@@ -1,37 +1,44 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
-using Clappban.Modal;
 using Clappban.Models.Boards;
+using Clappban.Navigation.Navigators;
+using Clappban.ViewModels.Factories;
 using ReactiveUI;
-using Task = System.Threading.Tasks.Task;
 
 namespace Clappban.ViewModels;
 
 public class BoardViewModel : ViewModelBase
 {
-    private readonly IBoardRepository _boardRepository;
-    private readonly ModalManager _modalViewModel;
-
-    public Board Board => _boardRepository.CurrentBoard!;
-    public IEnumerable<ColumnViewModel>? Columns { get; }
+    private readonly IColumnViewModelFactory _columnFactory;
+    public Board Board { get; private set; }
+    public IEnumerable<ColumnViewModel>? Columns { get; private set; }
     public ICommand ReloadCommand { get; }
     public ICommand EditCommand { get; }
     
-    public BoardViewModel(IBoardRepository boardRepository, ModalManager modalViewModel)
+    public BoardViewModel(Board board, IColumnViewModelFactory columnFactory, IBoardRepository boardRepository, INavigator<string> editBoardNavigator)
     {
-        _boardRepository = boardRepository;
-        _modalViewModel = modalViewModel;
+        _columnFactory = columnFactory;
+        Board = board;
 
-        Columns = _boardRepository.CurrentBoard?.Columns.Select(x => new ColumnViewModel(x)).ToList();
-
+        ReloadBoard();
+        
         ReloadCommand =
-            ReactiveCommand.CreateFromTask(() => _boardRepository.OpenAsync(Board.FilePath));
+            ReactiveCommand.CreateFromTask(async () =>
+            {
+                Board = await boardRepository.OpenAsync(Board.FilePath);
+                ReloadBoard();
+            });
         
         EditCommand = ReactiveCommand.Create(() =>
         {
-            _modalViewModel.DisplayModal(
-                new EditFileViewModel(_boardRepository.CurrentBoard.FilePath, _boardRepository));
+            editBoardNavigator.Navigate(Board.FilePath);
         });
+    }
+
+    private void ReloadBoard()
+    {
+        Columns = Board.Columns.Select(_columnFactory.Create);
+        this.RaisePropertyChanged(nameof(Columns));
     }
 }

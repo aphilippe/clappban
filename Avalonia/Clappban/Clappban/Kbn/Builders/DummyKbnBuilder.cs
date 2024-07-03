@@ -2,7 +2,7 @@
 
 public class DummyKbnBuilder : IKbnBuilder
 {
-    private IKbnSectionBuilder _sectionBuilder = new DummyKbnSectionBuilder();
+    private readonly IKbnSectionBuilder _sectionBuilder = new DummyKbnSectionBuilder();
     public void SetTitle(string title)
     {
         // do nothing

@@ -1,9 +1,7 @@
-﻿using System.IO;
-using System.Windows.Input;
-using Avalonia.Controls;
+﻿using System.Windows.Input;
 using Clappban.InjectionDependency;
-using Clappban.Modal;
 using Clappban.Models.Boards;
+using Clappban.Navigation.Navigators;
 using ReactiveUI;
 using Splat;
 
@@ -16,12 +14,14 @@ public class TaskViewModel : ViewModelBase
     public string Title => _task.Title;
     public ICommand OpenTaskCommand { get; }
 
-    public TaskViewModel(Task task)
+    public TaskViewModel(Task task, INavigator<string> editTaskNavigator)
     {
         _task = task;
         OpenTaskCommand = ReactiveCommand.CreateFromTask(async () =>
         {
-            Locator.Current.GetRequiredService<ModalManager>().DisplayModal(new EditFileViewModel(_task.FilePath, null));
+            // Locator.Current.GetRequiredService<ModalManager>().DisplayModal(new EditFileViewModel(_task.FilePath));
+            // Locator.Current.GetRequiredService<NavigationService>().Display(typeof(EditFileViewModel), _task.FilePath);
+            editTaskNavigator.Navigate(_task.FilePath);
         });
     }
 }
