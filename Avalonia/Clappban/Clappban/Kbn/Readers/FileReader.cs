@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Clappban.Kbn.Readers.LineReaders;
 
 namespace Clappban.Kbn.Readers;

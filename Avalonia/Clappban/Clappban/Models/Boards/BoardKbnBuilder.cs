@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using Avalonia.Controls.Platform;
 using Avalonia.Platform.Storage;
 using Clappban.Kbn.Builders;
+using Clappban.Models.Boards.Utils;
 
 namespace Clappban.Models.Boards;
 
@@ -46,7 +47,7 @@ public class BoardKbnBuilder : IKbnBuilder
 public class ColumnBuilder : IKbnSectionBuilder
 {
     private readonly string _title;
-    private readonly List<TaskBuilder> _tasks = new();
+    private readonly List<Task> _tasks = new();
     private readonly string _boardFilePath;
 
     public ColumnBuilder(string title, string boardFilePath)
@@ -58,38 +59,13 @@ public class ColumnBuilder : IKbnSectionBuilder
     public void AppendToContent(string text)
     {
         if (string.IsNullOrEmpty(text)) return;
-        var pattern = @"^(?<title>.*)\s\[(?<file>[^\s\[\]]*)]$";
-        var match = Regex.Match(text, pattern);
 
-        if (!match.Success) throw new InvalidBoardFileException();
-
-        string taskFilePath = Path.Combine(Path.GetDirectoryName(_boardFilePath), match.Groups["file"].Value);
-        
-        _tasks.Add(new TaskBuilder(match.Groups["title"].Value, taskFilePath));
+        _tasks.Add(TaskStringExtractor.Extract(text, _boardFilePath));
     }
 
     public Column Build()
     {
-        var tasks = _tasks.Select(x => x.Build());
-        return new Column(_title, tasks);
-    }
-}
-
-public class TaskBuilder
-{
-    private readonly string _title;
-    private readonly string _filePath;
-
-    public TaskBuilder(string title, string filePath)
-    {
-        _title = title;
-        _filePath = filePath;
-    }
-
-    public Task Build()
-    {
-        // we do not use file for now
-        return new Task(_title, _filePath);
+        return new Column(_title, _tasks);
     }
 }
 
