@@ -44,7 +44,7 @@ public class KbnFileReader
         emptyLineAfterMainTitleLineReader.NextPossibleReaders = new ILineReader[] { sectionTitleLineReader, endLineReader };
         sectionTitleLineReader.NextPossibleReaders = new ILineReader[] { emptyAfterSectionTitleLineReader };
         emptyAfterSectionTitleLineReader.NextPossibleReaders = new ILineReader[]
-            {sectionTitleLineReader, sectionContentLineReader};
+            {sectionTitleLineReader, endLineReader, sectionContentLineReader};
         sectionContentLineReader.NextPossibleReaders = new ILineReader[] { sectionTitleLineReader, endLineReader, sectionContentLineReader };
 
         var fileReader = new FileReader(mainTitleLineReader);
