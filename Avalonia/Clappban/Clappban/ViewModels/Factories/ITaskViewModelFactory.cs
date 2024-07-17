@@ -10,9 +10,9 @@ public interface ITaskViewModelFactory
 
 public class TaskViewModelFactory : ITaskViewModelFactory
 {
-    private readonly INavigator<string> _editTaskNavigator;
+    private readonly INavigator<Task> _editTaskNavigator;
 
-    public TaskViewModelFactory(INavigator<string> editTaskNavigator)
+    public TaskViewModelFactory(INavigator<Task> editTaskNavigator)
     {
         _editTaskNavigator = editTaskNavigator;
     }

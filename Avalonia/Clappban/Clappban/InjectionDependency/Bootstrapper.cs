@@ -16,9 +16,11 @@ public static class Bootstrapper
         var modalViewPresenter = new ModalViewPresenter();
         
         services.RegisterLazySingleton<IBoardRepository>(() => new BoardRepository());
-        
+
         services.Register<ITaskViewModelFactory>(() => new TaskViewModelFactory(
-            new ParameterNavigator<string,EditFileViewModel>(modalViewPresenter, path => GenerateEditFileViewModel(path, modalViewPresenter))));
+            new ParameterNavigator<Task, EditFileViewModel>(modalViewPresenter, task => new EditFileViewModel(task.FilePath, new CloseModalNavigator(modalViewPresenter)))
+        ));
+        
         services.Register<IColumnViewModelFactory>(() => new ColumnViewModelFactory(resolver.GetRequiredService<ITaskViewModelFactory>()));
         
         services.Register(() => new BoardViewModelFactory(
