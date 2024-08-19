@@ -10,20 +10,24 @@
              Width="272"
              Background="#101204"
              CornerRadius="10">
-    <StackPanel Spacing="10" Margin="10">
-        <Label Content="{Binding Title}"
+    <DockPanel>
+        <Label DockPanel.Dock="Top" Margin="10 10 10 0" 
+               Content="{Binding Title}"
                Foreground="#b6c2cf" FontWeight="Bold" />
-        <ItemsControl ItemsSource="{Binding Tasks}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Spacing="10" />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <views:TaskView DataContext="{Binding .}"/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </StackPanel>
+        <ScrollViewer>
+            <ItemsControl ItemsSource="{Binding Tasks}"
+                          Margin="10">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Spacing="10" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <views:TaskView DataContext="{Binding .}" />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </DockPanel>
 </UserControl>
