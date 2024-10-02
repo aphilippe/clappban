@@ -15,7 +15,8 @@ public class BoardViewModel : ViewModelBase
     public IEnumerable<ColumnViewModel>? Columns { get; private set; }
     public ICommand ReloadCommand { get; }
     public ICommand EditCommand { get; }
-    
+    public override string Title => Board.Name;
+
     public BoardViewModel(Board board, IColumnViewModelFactory columnFactory, IBoardRepository boardRepository, INavigator<string> editBoardNavigator)
     {
         _columnFactory = columnFactory;

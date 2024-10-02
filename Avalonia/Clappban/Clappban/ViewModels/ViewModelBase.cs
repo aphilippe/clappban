@@ -2,6 +2,7 @@
 
 namespace Clappban.ViewModels;
 
-public class ViewModelBase : ReactiveObject
+public abstract class ViewModelBase : ReactiveObject
 {
+    public virtual string Title => "Clappban";
 }

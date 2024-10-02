@@ -10,11 +10,13 @@ public class MainWindowViewModel : ViewModelBase
     public ViewModelBase? ContentViewModel => _mainViewModelPresenter.CurrentViewModel;
     public ViewModelBase? ModalViewModel => _modalViewModelPresenter.CurrentViewModel;
 
+    public string Title => _mainViewModelPresenter.Title;
+
     private readonly IViewModelPresenter _modalViewModelPresenter;
-    private readonly IViewModelPresenter _mainViewModelPresenter;
+    private readonly MainViewModelPresenter _mainViewModelPresenter;
     
     public MainWindowViewModel(IViewModelPresenter modalViewModelPresenterPresenter,
-        IViewModelPresenter mainViewModelPresenter)
+        MainViewModelPresenter mainViewModelPresenter)
     {
         _modalViewModelPresenter = modalViewModelPresenterPresenter;
         _mainViewModelPresenter = mainViewModelPresenter;
@@ -23,6 +25,7 @@ public class MainWindowViewModel : ViewModelBase
         mainViewModelPresenter.CurrentViewModelChanged += (_, _) =>
         {
             this.RaisePropertyChanged(nameof(ContentViewModel));
+            this.RaisePropertyChanged(nameof(Title));
         };
 
         _modalViewModelPresenter.CurrentViewModelChanged += (_, _) =>

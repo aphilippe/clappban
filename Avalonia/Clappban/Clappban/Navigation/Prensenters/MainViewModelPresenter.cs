@@ -13,4 +13,5 @@ public class MainViewModelPresenter : IViewModelPresenter
     
     public event EventHandler CurrentViewModelChanged;
     public ViewModelBase? CurrentViewModel { get; private set; }
+    public string Title => CurrentViewModel.Title;
 }

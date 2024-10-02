@@ -3,11 +3,12 @@
         xmlns:vm="using:Clappban.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:Clappban.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="Clappban.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="Clappban">
+        Title="{Binding  Title}">
 
     <Design.DataContext>
         <!-- This only sets the DataContext for the previewer in an IDE,
@@ -15,7 +16,7 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
     <Grid>
-        <ContentControl Content="{Binding ContentViewModel}"
+        <ContentControl Name="Main" Content="{Binding ContentViewModel}"
                         Classes.ModalOpen="{Binding #Modal.IsVisible}"
                         VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <ContentControl.Styles>
