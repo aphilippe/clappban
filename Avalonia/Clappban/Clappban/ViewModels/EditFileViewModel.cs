@@ -5,6 +5,7 @@ using System.Windows.Input;
 using Clappban.Kbn.Builders;
 using Clappban.Kbn.Readers;
 using Clappban.Navigation.Navigators;
+using Microsoft.VisualBasic.CompilerServices;
 using ReactiveUI;
 using Console = System.Console;
 using Task = System.Threading.Tasks.Task;
@@ -13,13 +14,14 @@ namespace Clappban.ViewModels;
 
 public class EditFileViewModel : ViewModelBase
 {
+    public EditFileViewModel(string text, string filePath, INavigator finishEditingNavigator)
+        : this (filePath, finishEditingNavigator)
+    {
+        Text = text;
+    }
+    
     public EditFileViewModel(string filePath, INavigator finishEditingNavigator)
     {
-        using (var sr = new StreamReader(filePath))
-        {
-            Text = sr.ReadToEnd();
-        }
-
         var saveCommand = ReactiveCommand.CreateFromTask(async () =>
         {
             ErrorDetected = false;
@@ -62,7 +64,7 @@ public class EditFileViewModel : ViewModelBase
         streamWriter.Close();
     }
 
-    public string Text { get; set; }
+    public string Text { get; set; } = "";
     private bool _errorDetected = false;
     public bool ErrorDetected
     {

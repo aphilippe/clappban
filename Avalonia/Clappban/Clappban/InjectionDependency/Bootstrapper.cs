@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls.Shapes;
+﻿using System.IO;
+using Avalonia.Controls.Shapes;
 using Clappban.Models.Boards;
 using Clappban.Navigation;
 using Clappban.Navigation.Navigators;
@@ -18,7 +19,6 @@ public static class Bootstrapper
         services.RegisterLazySingleton<IBoardRepository>(() => new BoardRepository());
 
         services.Register<ITaskViewModelFactory>(() => new TaskViewModelFactory(
-            // need to use conditionalNavigator here. 
             new ConditionalNavigator<Task>(
                 task => !string.IsNullOrEmpty(task.FilePath),
                 new ParameterNavigator<Task,EditFileViewModel>(modalViewPresenter, task => GenerateEditFileViewModel(task.FilePath, modalViewPresenter)),
@@ -46,7 +46,12 @@ public static class Bootstrapper
 
     private static EditFileViewModel GenerateEditFileViewModel(string path, ModalViewPresenter modalViewPresenter)
     {
+        string text;
+        using (var sr = new StreamReader(path))
+        {
+             text = sr.ReadToEnd();
+        }
         var finishEditingNavigator = new CloseModalNavigator(modalViewPresenter);
-        return new EditFileViewModel(path, finishEditingNavigator);
+        return new EditFileViewModel(text, path, finishEditingNavigator);
     }
 }
