@@ -18,7 +18,7 @@ public class TaskViewModel : ViewModelBase
     public TaskViewModel(Task task, INavigator<Task> editTaskNavigator)
     {
         _task = task;
-        OpenTaskCommand = ReactiveCommand.CreateFromTask(async () =>
+        OpenTaskCommand = ReactiveCommand.Create(() =>
         {
             if (string.IsNullOrEmpty(_task.FilePath)) return;
             editTaskNavigator.Navigate(_task);

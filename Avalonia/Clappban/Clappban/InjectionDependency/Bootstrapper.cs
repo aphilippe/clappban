@@ -18,7 +18,12 @@ public static class Bootstrapper
         services.RegisterLazySingleton<IBoardRepository>(() => new BoardRepository());
 
         services.Register<ITaskViewModelFactory>(() => new TaskViewModelFactory(
-            new ParameterNavigator<Task, EditFileViewModel>(modalViewPresenter, task => new EditFileViewModel(task.FilePath, new CloseModalNavigator(modalViewPresenter)))
+            // need to use conditionalNavigator here. 
+            new ConditionalNavigator<Task>(
+                task => !string.IsNullOrEmpty(task.FilePath),
+                new ParameterNavigator<Task,EditFileViewModel>(modalViewPresenter, task => GenerateEditFileViewModel(task.FilePath, modalViewPresenter)),
+                new NullNavigator<Task>()
+            )
         ));
         
         services.Register<IColumnViewModelFactory>(() => new ColumnViewModelFactory(resolver.GetRequiredService<ITaskViewModelFactory>()));
