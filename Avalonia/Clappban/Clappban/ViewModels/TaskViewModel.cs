@@ -11,16 +11,17 @@ namespace Clappban.ViewModels;
 public class TaskViewModel : ViewModelBase
 {
     private readonly Task _task;
+    private readonly Board _board;
 
     public string Title => _task.Title;
     public ICommand OpenTaskCommand { get; }
 
-    public TaskViewModel(Task task, INavigator<Task> editTaskNavigator)
+    public TaskViewModel(Task task, Board board, INavigator<Task> editTaskNavigator)
     {
         _task = task;
+        _board = board;
         OpenTaskCommand = ReactiveCommand.Create(() =>
         {
-            if (string.IsNullOrEmpty(_task.FilePath)) return;
             editTaskNavigator.Navigate(_task);
         });
     }

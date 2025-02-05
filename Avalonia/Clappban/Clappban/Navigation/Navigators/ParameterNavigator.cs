@@ -14,8 +14,8 @@ public class ParameterNavigator<TParam, TViewModel> : INavigator<TParam> where T
         _viewModelFactory = viewModelFactory;
     }
 
-    public void Navigate(TParam param)
+    public void Navigate(TParam task)
     {
-        _presenter.Display(_viewModelFactory(param));
+        _presenter.Display(_viewModelFactory(task));
     }
 }

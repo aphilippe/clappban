@@ -5,7 +5,7 @@ namespace Clappban.ViewModels.Factories;
 
 public interface IColumnViewModelFactory
 {
-    ColumnViewModel Create(Column column);
+    ColumnViewModel Create(Column column, Board board);
 }
 
 public class ColumnViewModelFactory : IColumnViewModelFactory
@@ -17,8 +17,8 @@ public class ColumnViewModelFactory : IColumnViewModelFactory
         _taskViewModelFactory = taskViewModelFactory;
     }
 
-    public ColumnViewModel Create(Column column)
+    public ColumnViewModel Create(Column column, Board board)
     {
-        return new ColumnViewModel(column, _taskViewModelFactory);
+        return new ColumnViewModel(column, _taskViewModelFactory, board);
     }
 }

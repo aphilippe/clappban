@@ -10,7 +10,7 @@ public class NullNavigator : INavigator
 
 public class NullNavigator<TParam> : INavigator<TParam>
 {
-    public void Navigate(TParam param)
+    public void Navigate(TParam task)
     {
         // Do nothing
     }

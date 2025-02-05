@@ -22,6 +22,7 @@ public class EditFileViewModel : ViewModelBase
     
     public EditFileViewModel(string filePath, INavigator finishEditingNavigator)
     {
+        FilePath = filePath;
         var saveCommand = ReactiveCommand.CreateFromTask(async () =>
         {
             ErrorDetected = false;
@@ -31,7 +32,7 @@ public class EditFileViewModel : ViewModelBase
                 return;
             }
 
-            await SaveFile(filePath);
+            await SaveFile(FilePath);
 
             finishEditingNavigator.Navigate();
         });
@@ -49,7 +50,7 @@ public class EditFileViewModel : ViewModelBase
         {
             KbnFileReader.Read(streamReader, kbnBuilder);
         }
-        catch (Exception)
+        catch (Exception e)
         {
             return false;
         }
@@ -65,6 +66,7 @@ public class EditFileViewModel : ViewModelBase
     }
 
     public string Text { get; set; } = "";
+    public string FilePath { get; }
     private bool _errorDetected = false;
     public bool ErrorDetected
     {

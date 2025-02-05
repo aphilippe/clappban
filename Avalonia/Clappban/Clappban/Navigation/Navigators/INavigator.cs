@@ -7,5 +7,5 @@ public interface INavigator
 
 public interface INavigator<in TParam>
 {
-    void Navigate(TParam param);
+    void Navigate(TParam task);
 }

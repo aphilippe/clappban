@@ -1,8 +1,12 @@
 ﻿using System.IO;
+using System.IO.Abstractions;
 using Avalonia.Controls.Shapes;
 using Clappban.Models.Boards;
 using Clappban.Navigation;
 using Clappban.Navigation.Navigators;
+using Clappban.Navigation.Navigators.specifics;
+using Clappban.Navigation.Navigators.Specifics.Task;
+using Clappban.Utils.IdGenerators;
 using Clappban.ViewModels;
 using Clappban.ViewModels.Factories;
 using Splat;
@@ -18,13 +22,8 @@ public static class Bootstrapper
         
         services.RegisterLazySingleton<IBoardRepository>(() => new BoardRepository());
 
-        services.Register<ITaskViewModelFactory>(() => new TaskViewModelFactory(
-            new ConditionalNavigator<Task>(
-                task => !string.IsNullOrEmpty(task.FilePath),
-                new ParameterNavigator<Task,EditFileViewModel>(modalViewPresenter, task => GenerateEditFileViewModel(task.FilePath, modalViewPresenter)),
-                new NullNavigator<Task>()
-            )
-        ));
+        // TODO uncomment and make it work
+        services.Register<ITaskViewModelFactory>(() => new TaskViewModelFactory(modalViewPresenter, new CloseModalNavigator(modalViewPresenter)));
         
         services.Register<IColumnViewModelFactory>(() => new ColumnViewModelFactory(resolver.GetRequiredService<ITaskViewModelFactory>()));
         

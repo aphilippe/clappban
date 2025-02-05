@@ -39,7 +39,7 @@ public class BoardViewModel : ViewModelBase
 
     private void ReloadBoard()
     {
-        Columns = Board.Columns.Select(_columnFactory.Create);
+        Columns = Board.Columns.Select(x => _columnFactory.Create(x, Board));
         this.RaisePropertyChanged(nameof(Columns));
     }
 }

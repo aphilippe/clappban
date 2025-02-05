@@ -23,5 +23,11 @@
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.6"/>
         <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.6"/>
         <PackageReference Include="Projektanker.Icons.Avalonia.FontAwesome" Version="9.0.1" />
+        <PackageReference Include="System.IO.Abstractions" Version="21.3.1" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+      <Folder Include="InjectionDependency\factories\" />
     </ItemGroup>
 </Project>

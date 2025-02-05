@@ -8,6 +8,8 @@ public class ConditionalNavigator <TParam> : INavigator<TParam>
     private readonly INavigator<TParam> _conditionalTrueNavigator;
     private readonly INavigator<TParam> _conditionalFalseNavigator;
 
+    protected ConditionalNavigator(){}
+    
     public ConditionalNavigator(Func<TParam, bool> condition, INavigator<TParam> conditionalTrueNavigator, INavigator<TParam> conditionalFalseNavigator)
     {
         _condition = condition;
@@ -15,9 +17,9 @@ public class ConditionalNavigator <TParam> : INavigator<TParam>
         _conditionalFalseNavigator = conditionalFalseNavigator;
     }
 
-    public void Navigate(TParam param)
+    public void Navigate(TParam task)
     {
-        var navigator = _condition(param) ? _conditionalTrueNavigator : _conditionalFalseNavigator;
-        navigator.Navigate(param);
+        var navigator = _condition(task) ? _conditionalTrueNavigator : _conditionalFalseNavigator;
+        navigator.Navigate(task);
     }
 }

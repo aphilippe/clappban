@@ -27,7 +27,6 @@ public class TaskStringExtractor
             title = line;
         }
         
-        
         return new Task(title, path);
     }
 }
