@@ -70,13 +70,13 @@ public class KbnSerializersTests
         Mock.Get(kbnExtractor).Setup(x => x.GetTitle(It.IsAny<object>())).Returns("title");
         Mock.Get(kbnExtractor).Setup(x => x.GetSections(It.IsAny<object>())).Returns(Enumerable.Range(0,2).Select(x => new object()));
         
-        var sectionExtractor1 = Mock.Of<IKbnSectionInfoExtractor<object>>();
-        Mock.Get(sectionExtractor1).Setup(x => x.GetTitle(It.IsAny<object>())).Returns("Section 1");
-        Mock.Get(sectionExtractor1).Setup(x => x.GetContent(It.IsAny<object>())).Returns("content of section 1");
+        var sectionExtractor1 = Mock.Of<IKbnSectionInfoExtractor>();
+        Mock.Get(sectionExtractor1).Setup(x => x.GetTitle()).Returns("Section 1");
+        Mock.Get(sectionExtractor1).Setup(x => x.GetContent()).Returns("content of section 1");
         
-        var sectionExtractor2 = Mock.Of<IKbnSectionInfoExtractor<object>>();
-        Mock.Get(sectionExtractor2).Setup(x => x.GetTitle(It.IsAny<object>())).Returns("Section 2");
-        Mock.Get(sectionExtractor2).Setup(x => x.GetContent(It.IsAny<object>())).Returns("content of section 2");
+        var sectionExtractor2 = Mock.Of<IKbnSectionInfoExtractor>();
+        Mock.Get(sectionExtractor2).Setup(x => x.GetTitle()).Returns("Section 2");
+        Mock.Get(sectionExtractor2).Setup(x => x.GetContent()).Returns("content of section 2");
         
         var sectionExtractorContainer = Mock.Of<IKbnSectionInfoExtractorSelector>();
         Mock.Get(sectionExtractorContainer).SetupSequence(x => x.Select(It.IsAny<object>()))

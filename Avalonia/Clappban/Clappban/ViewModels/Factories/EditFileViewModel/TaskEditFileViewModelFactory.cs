@@ -1,5 +1,9 @@
-﻿using System.IO.Abstractions;
+﻿using System.IO;
+using System.IO.Abstractions;
+using Clappban.Kbn.Serializers;
+using Clappban.Kbn.Serializers.SectionExtractors;
 using Clappban.Models.Boards;
+using Clappban.Models.Boards.Serialization;
 using Clappban.Navigation.Navigators;
 using ReactiveUI;
 
@@ -34,15 +38,11 @@ public class TaskEditFileViewModelFactory
         {
             task.FilePath = filePath;
 
-            // var kbnString = kbnSerializer.Serialize(board); // Specific serializer for board
-            // var filePath = board.FilePath + "test";
-            // _fileSystem.File.WriteAllText(filePath, kbnString);
-            
-            // old
-            // var kbn = BoardToKbnFactory.CreateKbn(board);
-            // var kbnWriter = new KbnWriter();
-            // using var fileStream = new StreamWriter(board.FilePath + "test");
-            // kbnWriter.Write(kbn,fileStream);
+            var boardInfoExtractor = new BoardKbnInfoExtractor();
+            var selector = new SimpleKbnSectionInfoExtractorSelector<Column>(c => new ColumnKbnSectionInfoExtractor(c, new TaskSerializer(Path.GetDirectoryName(board.FilePath))));
+            var boardKbnSerializer = new KbnSerializer<Board>(boardInfoExtractor, selector);
+            var boardString = boardKbnSerializer.Serialize(board);
+            _fileSystem.File.WriteAllText(board.FilePath, boardString);
         });
         
         return new ViewModels.EditFileViewModel(filePath, _finishEditingNavigator, afterSaveCommand);

@@ -23,7 +23,7 @@ public class TaskSerializerTests
     [Test]
     public void Test_Serialize_WhenPathIsNotEmpty_ReturnTitleWithRelativePath()
     {
-        var path = @"C:\path\to\parent\";
+        var path = @"C:\path\to\parent";
         var task = new Task("title", Path.Combine(path, "folder\\fileName.kbn"));
         
         var serializer = new TaskSerializer(path);
@@ -36,7 +36,7 @@ public class TaskSerializerTests
     [Test]
     public void Test_Serialize_WhenPathIsNotEmptyButThereIsTagInTitle_ReturnValidString()
     {
-        var path = @"C:\path\to\parent\";
+        var path = @"C:\path\to\parent";
         var task = new Task("title | #tag", Path.Combine(path, "folder\\fileName.kbn"));
         
         var serializer = new TaskSerializer(path);

@@ -5,23 +5,25 @@ using Clappban.Kbn.Serializers;
 
 namespace Clappban.Models.Boards.Serialization;
 
-public class ColumnKbnSectionInfoExtractor : IKbnSectionInfoExtractor<Column>
+public class ColumnKbnSectionInfoExtractor : IKbnSectionInfoExtractor
 {
     private readonly ITaskSerializer _taskSerializer;
+    private readonly Column _column;
 
-    public ColumnKbnSectionInfoExtractor(ITaskSerializer taskSerializer)
+    public ColumnKbnSectionInfoExtractor(Column column, ITaskSerializer taskSerializer)
     {
         _taskSerializer = taskSerializer;
+        _column = column;
     }
 
-    public string GetTitle(Column obj)
+    public string GetTitle()
     { 
-        return obj.Title;
+        return _column.Title;
     }
 
-    public string GetContent(Column obj)
+    public string GetContent()
     {
-        var allTaskString = obj.Tasks.Select(x => _taskSerializer.Serialize(x));
+        var allTaskString = _column.Tasks.Select(x => _taskSerializer.Serialize(x));
         return string.Join(Environment.NewLine, allTaskString);
     }
 }

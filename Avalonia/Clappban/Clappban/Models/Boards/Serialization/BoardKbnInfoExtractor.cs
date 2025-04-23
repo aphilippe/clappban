@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
 using Clappban.Kbn.Serializers;
 
 namespace Clappban.Models.Boards.Serialization;
@@ -10,7 +10,7 @@ public class BoardKbnInfoExtractor : IKbnInfoExtractor<Board>
         return obj.Name;
     }
 
-    public IEnumerable<object> GetSections(Board obj)
+    public IEnumerable GetSections(Board obj)
     {
         return obj.Columns;
     }

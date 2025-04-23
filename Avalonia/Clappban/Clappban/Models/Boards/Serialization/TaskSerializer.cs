@@ -1,4 +1,5 @@
-﻿using System.Security;
+﻿using System.IO;
+using System.Security;
 using System.Text;
 
 namespace Clappban.Models.Boards.Serialization;
@@ -28,7 +29,7 @@ public class TaskSerializer : ITaskSerializer
             stringBuilder.Append(" | ");
         }
 
-        var relativePath = task.FilePath.Replace(_path, string.Empty);
+        var relativePath = Path.GetRelativePath(_path, task.FilePath);
         stringBuilder.Append($"[{relativePath}]");
         
         return stringBuilder.ToString();

@@ -34,9 +34,9 @@ public class KbnSerializer<T> : IKbnSerializer<T>
                 throw new SectionExtractorNotFoundException(); 
             }
 
-            sb.AppendLine($"==== {sectionExtractor.GetTitle(section)} ====");
+            sb.AppendLine($"==== {sectionExtractor.GetTitle()} ====");
             sb.AppendLine();
-            sb.Append(sectionExtractor.GetContent(section));
+            sb.Append(sectionExtractor.GetContent());
             sb.AppendLine();
             sb.AppendLine();
         }

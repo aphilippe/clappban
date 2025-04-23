@@ -17,8 +17,8 @@ public class ColumnKbnSectionInfoExtractorTests
         var column = new Column("title", Enumerable.Empty<Task>());
         var taskSerializer = Mock.Of<ITaskSerializer>();
         
-        var extractor = new ColumnKbnSectionInfoExtractor(taskSerializer);
-        var result = extractor.GetContent(column);
+        var extractor = new ColumnKbnSectionInfoExtractor(column, taskSerializer);
+        var result = extractor.GetContent();
         
         Assert.That(result, Is.Empty);
     }
@@ -32,8 +32,8 @@ public class ColumnKbnSectionInfoExtractorTests
         var taskSerializer = Mock.Of<ITaskSerializer>();
         Mock.Get(taskSerializer).Setup(x => x.Serialize(It.IsAny<Task>())).Returns("Task serialized");
         
-        var extractor = new ColumnKbnSectionInfoExtractor(taskSerializer);
-        var result = extractor.GetContent(column);
+        var extractor = new ColumnKbnSectionInfoExtractor(column, taskSerializer);
+        var result = extractor.GetContent();
 
         Assert.That(result, Is.EqualTo("Task serialized"));
     }
@@ -48,8 +48,8 @@ public class ColumnKbnSectionInfoExtractorTests
         var taskSerializer = Mock.Of<ITaskSerializer>();
         Mock.Get(taskSerializer).Setup(x => x.Serialize(It.IsAny<Task>())).Returns($"Task {call}");
         
-        var extractor = new ColumnKbnSectionInfoExtractor(taskSerializer);
-        var result = extractor.GetContent(column);
+        var extractor = new ColumnKbnSectionInfoExtractor(column, taskSerializer);
+        var result = extractor.GetContent();
         
         var expectedResult = string.Join(Environment.NewLine, Enumerable.Range(0, 10).Select(i => $"Task {call}"));
         Assert.That(result, Is.EqualTo(expectedResult));

@@ -2,5 +2,5 @@
 
 public interface IKbnSectionInfoExtractorSelector
 {
-    IKbnSectionInfoExtractor<T>? Select<T>(T obj);
+    IKbnSectionInfoExtractor? Select(object obj);
 }
