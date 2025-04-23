@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.IO.Abstractions;
+using System.Text;
 using Clappban.Kbn.Serializers;
 using Clappban.Kbn.Serializers.SectionExtractors;
 using Clappban.Models.Boards;
@@ -44,7 +45,12 @@ public class TaskEditFileViewModelFactory
             var boardString = boardKbnSerializer.Serialize(board);
             _fileSystem.File.WriteAllText(board.FilePath, boardString);
         });
+
+        var stringBuilder = new StringBuilder();
+        stringBuilder.AppendLine($"==== {task.Title} ====")
+            .AppendLine()
+            .AppendLine("========");
         
-        return new ViewModels.EditFileViewModel(filePath, _finishEditingNavigator, afterSaveCommand);
+        return new ViewModels.EditFileViewModel(stringBuilder.ToString(), filePath, _finishEditingNavigator, afterSaveCommand);
     }
 }

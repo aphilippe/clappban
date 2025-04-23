@@ -14,14 +14,9 @@ namespace Clappban.ViewModels;
 
 public class EditFileViewModel : ViewModelBase
 {
-    public EditFileViewModel(string text, string filePath, INavigator finishEditingNavigator)
-        : this (filePath, finishEditingNavigator)
+    public EditFileViewModel(string text, string filePath, INavigator finishEditingNavigator, ICommand? afterSaveCommand = null)
     {
         Text = text;
-    }
-    
-    public EditFileViewModel(string filePath, INavigator finishEditingNavigator, ICommand? afterSaveCommand = null)
-    {
         FilePath = filePath;
         var validationCommand = ReactiveCommand.Create(() =>
         {
