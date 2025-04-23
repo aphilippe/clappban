@@ -64,22 +64,7 @@ public class FileReaderTest
         
         Mock.Get(startLineReader).Verify(x => x.NextPossibleReaders, Times.Once);
     }
-
-    [Test]
-    public void Test_Read_WhenStartLineReaderIsValidAndNextPossibleReadersIsEmpty_ReturnKbn()
-    {
-        using var stream = GenerateStreamReader(1);
-        
-        var startLineReader = Mock.Of<ILineReader>();
-        Mock.Get(startLineReader).Setup(x => x.IsValid(It.IsAny<string>())).Returns(true);
-        Mock.Get(startLineReader).Setup(x => x.Action(It.IsAny<string>()));
-        Mock.Get(startLineReader).Setup(x => x.NextPossibleReaders).Returns(Enumerable.Empty<ILineReader>());
-
-        var reader = new FileReader(startLineReader);
-        var kbn = reader.Read(stream);
-
-        Assert.That(kbn, Is.Not.Null);
-    }
+    
 
     [Test]
     public void
@@ -131,7 +116,7 @@ public class FileReaderTest
         Mock.Get(startLineReader).Setup(x => x.NextPossibleReaders).Returns(nextReaders);
 
         var reader = new FileReader(startLineReader);
-        var kbn = reader.Read(stream);
+        reader.Read(stream);
 
         Mock.Get(reader1).Verify(x => x.Action(It.IsAny<string>()), Times.Never());
         Mock.Get(reader1).Verify(x => x.NextPossibleReaders, Times.Never());

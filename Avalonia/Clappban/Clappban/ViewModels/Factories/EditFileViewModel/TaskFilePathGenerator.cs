@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Globalization;
 using System.IO;
 using Clappban.Models.Boards;
 using Clappban.Utils.IdGenerators;
 
-namespace Clappban.Navigation.Navigators.Specifics.Task;
+namespace Clappban.ViewModels.Factories.EditFileViewModel;
 
 public interface ITaskFilePathGenerator
 {

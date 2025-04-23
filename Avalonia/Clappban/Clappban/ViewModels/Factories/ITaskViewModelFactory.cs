@@ -2,9 +2,9 @@
 using Clappban.Models.Boards;
 using Clappban.Navigation;
 using Clappban.Navigation.Navigators;
-using Clappban.Navigation.Navigators.specifics;
-using Clappban.Navigation.Navigators.Specifics.Task;
 using Clappban.Utils.IdGenerators;
+using Clappban.ViewModels.Factories.EditFileViewModel;
+using TaskEditFileViewModelFactory = Clappban.ViewModels.Factories.EditFileViewModel.TaskEditFileViewModelFactory;
 
 namespace Clappban.ViewModels.Factories;
 
@@ -26,8 +26,9 @@ public class TaskViewModelFactory : ITaskViewModelFactory
 
     public TaskViewModel Create(Task task, Board board)
     {
-        var navigator = new EditTaskNavigator(_viewModelPresenter, _finishEditingNavigator,
+        var editFileViewModelFactory = new TaskEditFileViewModelFactory(_finishEditingNavigator,
             new FileSystem(), new TaskFilePathGenerator(board, new GuidGenerator()));
+        var navigator = new ParameterNavigator<Task, ViewModels.EditFileViewModel>(_viewModelPresenter, t => editFileViewModelFactory.Create(t, board));
         
         return new TaskViewModel(task, board, navigator);
     }

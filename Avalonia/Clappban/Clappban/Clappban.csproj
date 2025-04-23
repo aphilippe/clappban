@@ -29,5 +29,6 @@
 
     <ItemGroup>
       <Folder Include="InjectionDependency\factories\" />
+      <Folder Include="Navigation\Navigators\Specifics\Task\" />
     </ItemGroup>
 </Project>

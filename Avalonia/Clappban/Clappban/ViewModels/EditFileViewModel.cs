@@ -20,42 +20,42 @@ public class EditFileViewModel : ViewModelBase
         Text = text;
     }
     
-    public EditFileViewModel(string filePath, INavigator finishEditingNavigator)
+    public EditFileViewModel(string filePath, INavigator finishEditingNavigator, ICommand? afterSaveCommand = null)
     {
         FilePath = filePath;
-        var saveCommand = ReactiveCommand.CreateFromTask(async () =>
+        var validationCommand = ReactiveCommand.Create(() =>
         {
             ErrorDetected = false;
-            if (!IsTextValid())
-            {
-                ErrorDetected = true;
-                return;
-            }
-
-            await SaveFile(FilePath);
-
-            finishEditingNavigator.Navigate();
+            ValidateText();
         });
-        saveCommand.ThrownExceptions.Subscribe(ex => Console.Write(ex.Message));
-        SaveCommand = saveCommand;
+        validationCommand.ThrownExceptions.Subscribe(ex =>
+        {
+            ErrorDetected = true;
+            Console.Write(ex.Message);
+        });
+        
+        var saveCommand = ReactiveCommand.CreateFromTask(async () =>
+        {
+            await SaveFile(FilePath);
+        });
+        if (afterSaveCommand != null)
+        {
+           saveCommand.InvokeCommand(afterSaveCommand); 
+        }
+
+        validationCommand.InvokeCommand(saveCommand);
+        
+        validationCommand.Subscribe(ex => finishEditingNavigator.Navigate());
+        SaveCommand = validationCommand;
 
         CancelCommand = ReactiveCommand.Create(finishEditingNavigator.Navigate);
     }
 
-    private bool IsTextValid()
+    private void ValidateText()
     {
         var kbnBuilder = new DummyKbnBuilder();
         using var streamReader = new StreamReader(new MemoryStream(Encoding.UTF8.GetBytes(Text)));
-        try
-        {
-            KbnFileReader.Read(streamReader, kbnBuilder);
-        }
-        catch (Exception e)
-        {
-            return false;
-        }
-
-        return true;
+        KbnFileReader.Read(streamReader, kbnBuilder);
     }
 
     private async Task SaveFile(string filePath)

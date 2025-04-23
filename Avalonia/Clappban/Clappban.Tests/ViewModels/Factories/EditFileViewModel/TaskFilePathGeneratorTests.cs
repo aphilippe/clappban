@@ -1,14 +1,13 @@
-﻿
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using Clappban.Models.Boards;
-using Clappban.Navigation.Navigators.Specifics.Task;
 using Clappban.Utils.IdGenerators;
+using Clappban.ViewModels.Factories.EditFileViewModel;
 using Moq;
 using NUnit.Framework;
 
-namespace Clappban.Tests.Navigators.Specifics;
+namespace Clappban.Tests.ViewModels.Factories.EditFileViewModel;
 
 [TestFixture]
 [TestOf(typeof(TaskFilePathGenerator))]

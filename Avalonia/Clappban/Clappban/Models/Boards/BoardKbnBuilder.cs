@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
-using Avalonia.Controls.Platform;
-using Avalonia.Platform.Storage;
 using Clappban.Kbn.Builders;
 using Clappban.Models.Boards.Utils;
 

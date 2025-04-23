@@ -15,7 +15,7 @@ public class FileReader
         _startLineReader = startLineReader ?? throw new ArgumentNullException(nameof(startLineReader));
     }
 
-    public Kbn Read(StreamReader stream)
+    public void Read(StreamReader stream)
     {
         var lineReaders = new List<ILineReader> {_startLineReader};
 
@@ -37,8 +37,6 @@ public class FileReader
             chosenLineReader.Action(line);
             lineReaders = chosenLineReader.NextPossibleReaders?.ToList() ?? Enumerable.Empty<ILineReader>().ToList();
         }
-
-        return new Kbn("", new Section[]{});
     }
     
     public class NotValidException : Exception {}

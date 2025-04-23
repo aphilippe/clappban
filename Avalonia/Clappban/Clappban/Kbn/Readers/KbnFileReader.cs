@@ -8,7 +8,7 @@ using Clappban.Kbn.Readers.LineReaders.Conditions;
 
 namespace Clappban.Kbn.Readers;
 
-public class KbnFileReader
+public static class KbnFileReader
 {
     public static void Read(StreamReader stream, IKbnBuilder kbnBuilder)
     {

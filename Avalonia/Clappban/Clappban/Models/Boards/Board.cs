@@ -32,7 +32,7 @@ public class Column
 public class Task
 {
     public string Title { get; }
-    public string FilePath { get; }
+    public string FilePath { get; set; }
 
     public Task(string title, string filePath)
     {
