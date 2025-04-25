@@ -26,7 +26,7 @@ public class ColumnKbnSectionInfoExtractorTests
     [Test]
     public void Test_GetContent_WhenThereIsOneTask_ReturnOneTaskString()
     {
-        var task = new Task("title", string.Empty);
+        var task = new Task("title", string.Empty, string.Empty);
         var column = new Column("title", new[] { task });
 
         var taskSerializer = Mock.Of<ITaskSerializer>();
@@ -41,7 +41,7 @@ public class ColumnKbnSectionInfoExtractorTests
     [Test]
     public void Test_GetContent_WhenThereIsSeveralTasks_ReturnAllTasksString()
     {
-        var tasks = Enumerable.Range(0, 10).Select(i => new Task(string.Empty, string.Empty));
+        var tasks = Enumerable.Range(0, 10).Select(i => new Task(string.Empty, string.Empty, string.Empty));
         var column = new Column("title", tasks);
         var call = 0;
         

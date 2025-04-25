@@ -17,7 +17,7 @@ public class TaskFilePathGeneratorTests
     public void Test_Generate_WhenTaskHasAFilePath_ReturnTheTaskFilePath()
     {
         var board = new Board("name", Enumerable.Empty<Column>(), "");
-        var task = new Task("title", "filePath");
+        var task = new Task("title", "filePath", string.Empty);
         var idGenerator = Mock.Of<IIdGenerator>();
 
         var generator = new TaskFilePathGenerator(board, idGenerator);
@@ -45,7 +45,7 @@ public class TaskFilePathGeneratorTests
     {
         var board = new Board("title", Enumerable.Empty<Column>(), @"C:\plop\board.kbn");
         var taskAbsolutePath = "tasks";
-        var task = new Task(taskTitle, null);
+        var task = new Task(taskTitle, null, String.Empty);
         var idGenerator = Mock.Of<IIdGenerator>();
 
         Mock.Get(idGenerator).Setup(x => x.Generate()).Returns("unicId");

@@ -33,10 +33,12 @@ public class Task
 {
     public string Title { get; }
     public string FilePath { get; set; }
+    public string Metadata { get; set; }
 
-    public Task(string title, string filePath)
+    public Task(string title, string filePath, string metadata)
     {
         Title = title;
         FilePath = filePath;
+        Metadata = metadata;
     }
 }

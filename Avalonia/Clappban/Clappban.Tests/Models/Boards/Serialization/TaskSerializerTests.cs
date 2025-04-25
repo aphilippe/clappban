@@ -12,7 +12,7 @@ public class TaskSerializerTests
     [Test]
     public void Test_Serialize_WhenOnlyTitle_ReturnTitle()
     {
-        var task = new Task("title", string.Empty);
+        var task = new Task("title", string.Empty, string.Empty);
         
         var serializer = new TaskSerializer("");
         var result = serializer.Serialize(task);
@@ -24,7 +24,7 @@ public class TaskSerializerTests
     public void Test_Serialize_WhenPathIsNotEmpty_ReturnTitleWithRelativePath()
     {
         var path = @"C:\path\to\parent";
-        var task = new Task("title", Path.Combine(path, "folder\\fileName.kbn"));
+        var task = new Task("title", Path.Combine(path, "folder\\fileName.kbn"), string.Empty);
         
         var serializer = new TaskSerializer(path);
         var result = serializer.Serialize(task);
@@ -32,16 +32,28 @@ public class TaskSerializerTests
         Assert.That(result, Is.EqualTo("title | [folder\\fileName.kbn]"));
     }
 
-    // This test should be removed when tags will be managed (for now we use them directly in the title)
+    
     [Test]
-    public void Test_Serialize_WhenPathIsNotEmptyButThereIsTagInTitle_ReturnValidString()
+    public void Test_Serialize_WhenPathIsNotEmptyAndMetadataNotEmpty_ReturnValidString()
     {
         var path = @"C:\path\to\parent";
-        var task = new Task("title | #tag", Path.Combine(path, "folder\\fileName.kbn"));
+        var task = new Task("title", Path.Combine(path, "folder\\fileName.kbn"), "#tag");
         
         var serializer = new TaskSerializer(path);
         var result = serializer.Serialize(task);
         
         Assert.That(result, Is.EqualTo("title | #tag [folder\\fileName.kbn]"));
+    }
+    
+    [Test]
+    public void Test_Serialize_WhenPathIsEmptyAndMetadataNotEmpty_ReturnValidString()
+    {
+        var path = @"C:\path\to\parent";
+        var task = new Task("title", string.Empty, "#tag");
+        
+        var serializer = new TaskSerializer(path);
+        var result = serializer.Serialize(task);
+        
+        Assert.That(result, Is.EqualTo("title | #tag"));
     }
 }

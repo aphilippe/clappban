@@ -1,5 +1,5 @@
-﻿using System.IO;
-using System.Security;
+﻿using System.Globalization;
+using System.IO;
 using System.Text;
 
 namespace Clappban.Models.Boards.Serialization;
@@ -17,21 +17,26 @@ public class TaskSerializer : ITaskSerializer
     {
         var stringBuilder = new StringBuilder(task.Title);
         
-        if (string.IsNullOrEmpty(task.FilePath)) return stringBuilder.ToString();
+        if (!IsTaskContainMetadata(task)) return stringBuilder.ToString();
 
-        // This is needed until we fully manage tags in task
-        if (task.Title.Contains(" | "))
+        stringBuilder.Append(" |");
+
+        if (!string.IsNullOrEmpty(task.Metadata))
         {
-            stringBuilder.Append(' ');
-        }
-        else
-        {
-            stringBuilder.Append(" | ");
+            stringBuilder.Append(" " + task.Metadata);
         }
 
-        var relativePath = Path.GetRelativePath(_path, task.FilePath);
-        stringBuilder.Append($"[{relativePath}]");
-        
+        if (!string.IsNullOrEmpty(task.FilePath))
+        {
+            var relativePath = Path.GetRelativePath(_path, task.FilePath);
+            stringBuilder.Append($" [{relativePath}]");
+        }
+
         return stringBuilder.ToString();
     }
+
+    private static bool IsTaskContainMetadata(Task task)
+    {
+        return !string.IsNullOrEmpty(task.FilePath) || !string.IsNullOrEmpty(task.Metadata);
+    } 
 }
