@@ -11,15 +11,14 @@ namespace Clappban.ViewModels;
 public class TaskViewModel : ViewModelBase
 {
     private readonly Task _task;
-    private readonly Board _board;
 
     public string Title => _task.Title;
+    public string Metadata => _task.Metadata;
     public ICommand OpenTaskCommand { get; }
 
     public TaskViewModel(Task task, Board board, INavigator<Task> editTaskNavigator)
     {
         _task = task;
-        _board = board;
         OpenTaskCommand = ReactiveCommand.Create(() =>
         {
             editTaskNavigator.Navigate(_task);
